@@ -1,68 +1,44 @@
 #!/bin/sh
 
+
+# Call it from the .ashrc with /bin/sh /abs/path/to/install_commands.sh
+BINARIES_DIR="$(dirname "$(readlink -f "$0")")"
 BINARIES="neighborshow_cmd neighborshow_agent ifshow_cmd ifnetshow_client ifnetshow_agent"
 INSTALL_PATH="/usr/local/bin"
 
-echo "Installing commands to $INSTALL_PATH..."
+echo "Installing commands from $BINARIES_DIR to $INSTALL_PATH..."
 
-# Ensure /usr/local/bin exists and is writable
 mkdir -p "$INSTALL_PATH"
 
 for BIN in $BINARIES; do
-    if [ -f "$BIN" ]; then
-        cp "$BIN" "$INSTALL_PATH/"
+    if [ -f "$BINARIES_DIR/$BIN" ]; then
+        cp "$BINARIES_DIR/$BIN" "$INSTALL_PATH/"
         chmod +x "$INSTALL_PATH/$BIN"
         echo "Installed: $BIN"
     else
-        echo "Warning: $BIN not found in current directory!" >&2
+        echo "Warning: $BIN not found in $BINARIES_DIR!" >&2
     fi
 done
 
 echo "Installation complete."
 
-# Setup TinyCore init scripts instead of systemd
-setup_init_script() {
+start_service() {
     local service_name="$1"
     local exec_path="$INSTALL_PATH/$service_name"
-    local init_script="/etc/init.d/$service_name"
 
-    echo "Setting up init script for $service_name..."
+    if [ ! -x "$exec_path" ]; then
+        echo "Error: $exec_path not found or not executable!" >&2
+        return 1
+    fi
 
-    cat <<EOF > "$init_script"
-#!/bin/sh
-case "\$1" in
-    start)
-        echo "Starting $service_name..."
-        nohup "$exec_path" >/var/log/$service_name.log 2>&1 &
-        echo \$! > /var/run/$service_name.pid
-        ;;
-    stop)
-        echo "Stopping $service_name..."
-        kill \$(cat /var/run/$service_name.pid)
-        rm -f /var/run/$service_name.pid
-        ;;
-    restart)
-        \$0 stop
-        \$0 start
-        ;;
-    *)
-        echo "Usage: \$0 {start|stop|restart}"
-        exit 1
-        ;;
-esac
-EOF
-
-    chmod +x "$init_script"
-
-    # Enable script at boot
-    ln -sf "$init_script" /etc/init.d/rcS.d/S99"$service_name"
-
-    echo "$service_name init script installed."
+    echo "Starting $service_name..."
+    nohup "$exec_path" >/var/log/$service_name.log 2>&1 &
+    echo $! > "/var/run/$service_name.pid"
 }
 
-echo "Configuring init scripts..."
+echo "Starting services..."
 
-setup_init_script "neighborshow_agent"
-setup_init_script "ifnetshow_agent"
+start_service "neighborshow_agent"
+start_service "ifnetshow_agent"
 
-echo "All services configured to start on boot."
+echo "All services started successfully."
