@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install build dependencies
         run: |
@@ -25,7 +25,7 @@ jobs:
           make
 
       - name: Archive Debian binaries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: debian-binaries
           path: |
@@ -42,7 +42,7 @@ jobs:
       image: alpine:latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install build dependencies on Alpine
         run: |
@@ -54,7 +54,7 @@ jobs:
           make
 
       - name: Archive Alpine binaries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: alpine-binaries
           path: |
@@ -71,7 +71,7 @@ jobs:
       image: bensuperpc/tinycore:latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install build dependencies on TinyCore
         run: |
@@ -86,7 +86,7 @@ jobs:
           make
 
       - name: Archive TinyCore binaries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: tinycore-binaries
           path: |
