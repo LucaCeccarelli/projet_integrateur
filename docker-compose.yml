@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  debian_build:
+    image: debian:latest
+    container_name: debian_builder
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "
+      apt update && apt install -y build-essential &&
+      make &&
+      tar -czf binaries-debian.tar.gz ifshow_cmd ifnetshow_agent ifnetshow_client neighborshow_agent neighborshow &&
+      mv binaries-debian.tar.gz /app/output/
+      "
+  
+  alpine_build:
+    image: alpine:latest
+    container_name: alpine_builder
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "
+      apk add --no-cache gcc musl-dev make &&
+      make &&
+      tar -czf binaries-alpine.tar.gz ifshow_cmd ifnetshow_agent ifnetshow_client neighborshow_agent neighborshow &&
+      mv binaries-alpine.tar.gz /app/output/
+      "
