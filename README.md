@@ -24,7 +24,7 @@ make distclean
      ./ifshow -i eth0
      ```
 
-## Run the Agent and Client:
+## Run the Agent and Client for ifnetshow Command:
    - On the **remote machine**, run the **agent**:
      ```bash
      ./ifnetshow_agent
@@ -36,4 +36,18 @@ make distclean
      or
      ```bash
      ./ifnetshow_client -n <remote_IP> -i eth0
+     ```
+
+## Run the Agent and Client for neighborshow Command:
+   - On every machine that should respond as a neighbor, start the agent:
+     ```bash
+     ./neighborshow_agent
+     ```
+   - the host where you wish to discover neighbors, run:
+     ```bash
+     ./neighborshow
+     ```
+     or perform a multi-hop discovery :
+     ```bash
+     ./neighborshow -hop 3
      ```
