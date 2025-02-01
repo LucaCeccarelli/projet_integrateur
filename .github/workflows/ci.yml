@@ -64,27 +64,27 @@ jobs:
             neighborshow_agent
             neighborshow
 
-  tinycore:
-    name: Build on TinyCore
-    runs-on: ubuntu-latest
-    container:
-      image: lceccarelli/tinycore-compiler:latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # tinycore:
+  #   name: Build on TinyCore
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: lceccarelli/tinycore-compiler:latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Build project (TinyCore)
-        run: |
-          make distclean || true
-          make
+  #     - name: Build project (TinyCore)
+  #       run: |
+  #         make distclean || true
+  #         make
 
-      - name: Archive TinyCore binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: tinycore-binaries
-          path: |
-            ifshow_cmd
-            ifnetshow_agent
-            ifnetshow_client
-            neighborshow_agent
-            neighborshow
+  #     - name: Archive TinyCore binaries
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: tinycore-binaries
+  #         path: |
+  #           ifshow_cmd
+  #           ifnetshow_agent
+  #           ifnetshow_client
+  #           neighborshow_agent
+  #           neighborshow
