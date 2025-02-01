@@ -68,18 +68,11 @@ jobs:
     name: Build on TinyCore
     runs-on: ubuntu-latest
     container:
-      image: bensuperpc/tinycore:latest
+      image: lceccarelli/tinycore-compiler:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install build dependencies on TinyCore
-        run: |
-          tce-load -wi gcc
-          tce-load -wi gcc_libs
-          tce-load -wi gcc_libs-dev
-          tce-load -wi gcc_base-dev
-          tce-load -wi compiletc
       - name: Build project (TinyCore)
         run: |
           make distclean || true
